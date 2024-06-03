@@ -14,16 +14,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Start OWASP ZAP
-        run: docker run -u zap -p 8080:8080 -d owasp/zap2docker-stable zap.sh -daemon -port 8080
-
-      - name: Wait for OWASP ZAP to start
-        run: sleep 30
-
-      - name: Run OWASP ZAP Baseline Scan
-        run: docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t https://juice-shop.herokuapp.com/#/ -r zap_report.html
-
-      - name: Upload OWASP ZAP Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: zap-report
-          path: zap_report.html
+        run: docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://juice-shop.herokuapp.com/#
+        # fail action: false
